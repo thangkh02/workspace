@@ -1,0 +1,7 @@
+data/pw-profile/
+data/*.png
+data/*.jpg
+data/*.jpeg
+data/*.pdf
+data/candidates.json
+data/drafts.json
