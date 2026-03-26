@@ -6,6 +6,12 @@
 # Sử dụng: 
 #   1. Standalone: powershell -ExecutionPolicy Bypass -File scripts/collect_posts_from_group.ps1 -GroupUrl "https://..." -TargetCount 10
 #   2. Hoặc gọi từ script khác
+#
+# Browser API (OpenClaw CLI):
+#   - Navigate:  openclaw browser navigate <url> --browser-profile <profile>
+#   - Evaluate:  openclaw browser evaluate --fn <jsCode> --browser-profile <profile>
+#   - Snapshot:  openclaw browser snapshot --browser-profile <profile>
+#   NOTE: Old flags -i/-u are deprecated. Use --browser-profile and navigate separately.
 
 param(
     [Parameter(Mandatory=$false)]
@@ -182,6 +188,14 @@ New-Item -ItemType Directory -Path "logs" -Force -ErrorAction SilentlyContinue |
 $iteration = 0
 $totalPostsCollected = 0
 
+# Navigate browser to the group URL before the loop
+Write-Log "Navigating browser to: $GroupUrl"
+openclaw browser navigate $GroupUrl --browser-profile $BrowserProfile 2>&1 | ForEach-Object { Write-Log $_ }
+if ($LASTEXITCODE -ne 0) {
+    Write-Log "Warning: browser navigate returned non-zero exit code, continuing..." "WARN"
+}
+Start-Sleep -Seconds 3  # Wait for page to load
+
 while ($iteration -lt $MaxIterations) {
     $iteration += 1
     Write-Log ""
@@ -189,10 +203,8 @@ while ($iteration -lt $MaxIterations) {
     
     # Phase 1: Expand visible posts
     Write-Log "[Phase 1/5] Expanding visible posts..."
-    $expandOutput = openclaw browser evaluate `
-        -i $BrowserProfile `
-        -u $GroupUrl `
-        "./scripts/expand_visible_posts.js" 2>&1
+    $expandJs = Get-Content -Path "./scripts/expand_visible_posts.js" -Raw
+    $expandOutput = openclaw browser evaluate --fn $expandJs --browser-profile $BrowserProfile 2>&1
     
     if (-not (Assert-Success $LASTEXITCODE "expand_visible_posts.js")) {
         Write-Log "Warning: expand_visible_posts failed, continuing..." "WARN"
@@ -205,9 +217,8 @@ while ($iteration -lt $MaxIterations) {
     
     # Phase 2: Extract visible posts from DOM
     Write-Log "[Phase 2/5] Extracting posts from DOM..."
-    $extractOutput = openclaw browser evaluate `
-        -i $BrowserProfile `
-        "./scripts/extract_visible_posts.js" 2>&1
+    $extractJs = Get-Content -Path "./scripts/extract_visible_posts.js" -Raw
+    $extractOutput = openclaw browser evaluate --fn $extractJs --browser-profile $BrowserProfile 2>&1
     
     if ($LASTEXITCODE -eq 0) {
         try {
@@ -226,9 +237,8 @@ while ($iteration -lt $MaxIterations) {
     
     # Phase 3: Lookup action references
     Write-Log "[Phase 3/5] Looking up action references..."
-    $refsOutput = openclaw browser evaluate `
-        -i $BrowserProfile `
-        "./scripts/lookup_post_action_refs.js" 2>&1
+    $refsJs = Get-Content -Path "./scripts/lookup_post_action_refs.js" -Raw
+    $refsOutput = openclaw browser evaluate --fn $refsJs --browser-profile $BrowserProfile 2>&1
     
     if ($LASTEXITCODE -eq 0) {
         try {
@@ -284,9 +294,8 @@ while ($iteration -lt $MaxIterations) {
     # If not enough posts, scroll and continue
     if ($iteration -lt $MaxIterations) {
         Write-Log "Need more posts. Scrolling down (aggressive: 3 attempts + wait 4s)..."
-        $scrollOutput = openclaw browser evaluate `
-            -i $BrowserProfile `
-            "./scripts/scroll_page.js" 2>&1
+        $scrollJs = Get-Content -Path "./scripts/scroll_page.js" -Raw
+        $scrollOutput = openclaw browser evaluate --fn $scrollJs --browser-profile $BrowserProfile 2>&1
         
         if ($LASTEXITCODE -eq 0) {
             try {

@@ -4,6 +4,11 @@
 # Constraint: DRY-RUN ONLY. Không post, không comment, không submit gì.
 # 
 # Usage: powershell -ExecutionPolicy Bypass -File scripts/run_capture_pipeline.ps1 [-GroupUrl "..."] [-DryRun $true]
+#
+# Browser API (OpenClaw CLI):
+#   - Navigate:  openclaw browser navigate <url> --browser-profile <profile>
+#   - Evaluate:  openclaw browser evaluate --fn <jsCode> --browser-profile <profile>
+#   NOTE: Old flags -i/-u are deprecated. Use --browser-profile and navigate separately.
 
 param(
     [string]$GroupUrl = "https://www.facebook.com/groups/123456789",  # Config từ groups.json
@@ -33,14 +38,18 @@ function Assert-Success {
     }
 }
 
-# ===== PHASE 1: Expand visible posts (click "Xem thêm") =====
-Write-Log "========== PHASE 1: Expand visible posts =========="
-Write-Log "Opening browser and clicking 'Xem thêm' buttons..."
+# ===== PHASE 1: Navigate to group and expand visible posts (click "Xem thêm") =====
+Write-Log "========== PHASE 1: Navigate and expand visible posts =========="
+Write-Log "Navigating browser to: $GroupUrl"
 
-$expandResult = openclaw browser evaluate `
-    -i $BrowserProfile `
-    -u $GroupUrl `
-    "./scripts/expand_visible_posts.js"
+openclaw browser navigate $GroupUrl --browser-profile $BrowserProfile
+Assert-Success $LASTEXITCODE "browser navigate"
+
+Start-Sleep -Seconds 3  # Wait for page to fully load
+
+Write-Log "Clicking 'Xem thêm' buttons to expand posts..."
+$expandJs = Get-Content -Path "./scripts/expand_visible_posts.js" -Raw
+$expandResult = openclaw browser evaluate --fn $expandJs --browser-profile $BrowserProfile
 
 Assert-Success $LASTEXITCODE "expand_visible_posts.js"
 
@@ -53,9 +62,8 @@ Start-Sleep -Seconds 2
 Write-Log "========== PHASE 2: Extract visible posts from DOM =========="
 Write-Log "Extracting post content, author, time from page DOM..."
 
-$extractResult = openclaw browser evaluate `
-    -i $BrowserProfile `
-    "./scripts/extract_visible_posts.js" | ConvertFrom-Json
+$extractJs = Get-Content -Path "./scripts/extract_visible_posts.js" -Raw
+$extractResult = openclaw browser evaluate --fn $extractJs --browser-profile $BrowserProfile | ConvertFrom-Json
 
 Assert-Success $LASTEXITCODE "extract_visible_posts.js"
 
@@ -74,9 +82,8 @@ Write-Log "Saved DOM posts to: $extractFile"
 Write-Log "========== PHASE 3: Lookup action references =========="
 Write-Log "Finding comment/like/share button references..."
 
-$refsResult = openclaw browser evaluate `
-    -i $BrowserProfile `
-    "./scripts/lookup_post_action_refs.js" | ConvertFrom-Json
+$refsJs = Get-Content -Path "./scripts/lookup_post_action_refs.js" -Raw
+$refsResult = openclaw browser evaluate --fn $refsJs --browser-profile $BrowserProfile | ConvertFrom-Json
 
 Assert-Success $LASTEXITCODE "lookup_post_action_refs.js"
 

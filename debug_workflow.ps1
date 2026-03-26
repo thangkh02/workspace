@@ -1,4 +1,8 @@
 # debug_workflow.ps1 - Debug từng phase riêng lẻ
+# Browser API (OpenClaw CLI):
+#   - Navigate:  openclaw browser navigate <url> --browser-profile <profile>
+#   - Evaluate:  openclaw browser evaluate --fn <jsCode> --browser-profile <profile>
+#   NOTE: Old flags -i/-u are deprecated.
 
 param(
     [string]$GroupUrl = "https://www.facebook.com/groups/792610141458395/"
@@ -10,7 +14,14 @@ Write-Host ""
 
 # Phase 1: Test browser & page load
 Write-Host "PHASE 1: Test browser connection" -ForegroundColor Green
-Write-Host "Command: openclaw browser evaluate (simple test)" -ForegroundColor Gray
+Write-Host "Command: openclaw browser navigate + evaluate" -ForegroundColor Gray
+
+# Navigate first
+openclaw browser navigate $GroupUrl --browser-profile openclaw 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "WARNING: browser navigate returned non-zero. Browser may need to be running." -ForegroundColor Yellow
+}
+Start-Sleep -Seconds 2
 
 $testJs = @"
 (function() {
@@ -23,10 +34,7 @@ $testJs = @"
 })();
 "@
 
-$result1 = openclaw browser evaluate `
-    -i openclaw `
-    -u $GroupUrl `
-    -c $testJs 2>&1
+$result1 = openclaw browser evaluate --fn $testJs --browser-profile openclaw 2>&1
 
 Write-Host "Result:" -ForegroundColor Yellow
 Write-Host $result1
@@ -45,9 +53,8 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "PHASE 2: Test expand_visible_posts.js" -ForegroundColor Green
 Write-Host "Script: scripts/expand_visible_posts.js" -ForegroundColor Gray
 
-$result2 = openclaw browser evaluate `
-    -i openclaw `
-    "./scripts/expand_visible_posts.js" 2>&1
+$expandJs = Get-Content -Path "./scripts/expand_visible_posts.js" -Raw
+$result2 = openclaw browser evaluate --fn $expandJs --browser-profile openclaw 2>&1
 
 Write-Host "Output:" -ForegroundColor Yellow
 Write-Host $result2
@@ -64,9 +71,8 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "PHASE 3: Test extract_visible_posts.js" -ForegroundColor Green
 Write-Host "Script: scripts/extract_visible_posts.js" -ForegroundColor Gray
 
-$result3 = openclaw browser evaluate `
-    -i openclaw `
-    "./scripts/extract_visible_posts.js" 2>&1
+$extractJs = Get-Content -Path "./scripts/extract_visible_posts.js" -Raw
+$result3 = openclaw browser evaluate --fn $extractJs --browser-profile openclaw 2>&1
 
 Write-Host "Output (first 1000 chars):" -ForegroundColor Yellow
 $truncated = if ($result3.Length -gt 1000) { $result3.Substring(0, 1000) + "..." } else { $result3 }
