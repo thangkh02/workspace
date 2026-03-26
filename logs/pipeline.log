@@ -1,0 +1,133 @@
+[2026-03-25 14:51:52] [INFO] ========== PHASE 1: Expand visible posts ==========
+[2026-03-25 14:51:52] [INFO] Opening browser and clicking 'Xem thÃªm' buttons...
+[2026-03-25 14:52:09] [ERROR] FAILED at expand_visible_posts.js (exit code: 1)
+[2026-03-25 15:16:13] [INFO] Group URL: https://www.facebook.com/groups/ttud.2023
+[2026-03-25 15:16:13] [INFO] Group key: ttud_2023
+[2026-03-25 15:16:13] [INFO] Browser profile: openclaw
+[2026-03-25 15:16:13] [INFO] ========== PHASE 1: Open tab and capture snapshots ==========
+[2026-03-25 15:16:36] [INFO] browser open group tab output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:16:59] [INFO] browser tabs output: {
+  "tabs": [
+    {
+      "targetId": "8293ECBB893E6F8AC163EC4D2D9BA704",
+      "title": "THU?T TOÁN VÀ ?NG D?NG - PTIT.SAMSUNG 2023 | Facebook",
+      "url": "https://www.facebook.com/groups/ttud.2023",
+      "wsUrl": "ws://127.0.0.1:18800/devtools/page/8293ECBB893E6F8AC163EC4D2D9BA704",
+      "type": "page"
+    },
+    {
+      "targetId": "85CC7E79A8C316C626C8A39CF938A03D",
+      "title": "https://www.fbsbx.com/maw_proxy_page/?__cci=FQAREiIVABn1lQEC5ALSAiQuPkBGSEpMTlBUWFxeYGJkamxydHh6gAGCAYQBhgGIAYoBjAGUAZwBngGgAaQBuAHOAdoC3gHgAeIB6gHsAe4B8AH0Af4BgAKGApYCmgKgArACFGjEAdIB3AHmAfIBkgK...(truncated)
+[2026-03-25 15:17:00] [INFO] Resolved target id: D18BF69E985E68FF185B2D73082B5F7E
+[2026-03-25 15:17:12] [INFO] browser wait domcontentloaded output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:17:27] [INFO] browser wait initial settle output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:17:39] [INFO] capture AI snapshot output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:17:39] [INFO] Saved debug copy to: C:\Users\pntha\.openclaw\workspace\data\ttud_2023_group_snapshot_ui.txt
+[2026-03-25 15:17:53] [INFO] capture ARIA snapshot output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:17:54] [INFO] Saved debug copy to: C:\Users\pntha\.openclaw\workspace\data\ttud_2023_group_snapshot_content.txt
+[2026-03-25 15:17:54] [INFO] ========== PHASE 2: Expand visible posts ==========
+[2026-03-25 15:19:03] [INFO] Group URL: https://www.facebook.com/groups/ttud.2023
+[2026-03-25 15:19:03] [INFO] Group key: ttud_2023
+[2026-03-25 15:19:03] [INFO] Browser profile: openclaw
+[2026-03-25 15:19:03] [INFO] ========== PHASE 1: Open tab and capture snapshots ==========
+[2026-03-25 15:19:22] [INFO] browser open group tab output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:19:44] [INFO] browser tabs output: {
+  "tabs": [
+    {
+      "targetId": "0D289B6FD75ABDBF5A0A7494AD9D7DEE",
+      "title": "THU?T TOÁN VÀ ?NG D?NG - PTIT.SAMSUNG 2023 | Facebook",
+      "url": "https://www.facebook.com/groups/ttud.2023",
+      "wsUrl": "ws://127.0.0.1:18800/devtools/page/0D289B6FD75ABDBF5A0A7494AD9D7DEE",
+      "type": "page"
+    },
+    {
+      "targetId": "02C1336331CFF3543ED3234B702EA9B5",
+      "title": "https://www.fbsbx.com/maw_proxy_page/?__cci=FQAREiIVABn1lQEC5ALSAiQuPkBGSEpMTlBUWFxeYGJkamxydHh6gAGCAYQBhgGIAYoBjAGUAZwBngGgAaQBuAHOAdoC3gHgAeIB6gHsAe4B8AH0Af4BgAKGApYCmgKgArACFGjEAdIB3AHmAfIBkgK...(truncated)
+[2026-03-25 15:19:44] [INFO] Resolved target id: D18BF69E985E68FF185B2D73082B5F7E
+[2026-03-25 15:19:57] [INFO] browser wait domcontentloaded output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:20:14] [INFO] browser wait initial settle output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:20:29] [INFO] capture AI snapshot output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:20:29] [INFO] Saved debug copy to: C:\Users\pntha\.openclaw\workspace\data\ttud_2023_group_snapshot_ui.txt
+[2026-03-25 15:20:57] [INFO] capture ARIA snapshot output: |
+o  Doctor warnings --------------------------------------------------------+
+|                                                                          |
+|  - channels.telegram.groupPolicy is "allowlist" but groupAllowFrom (and  |
+|    allowFrom) is empty — all group messages will be silently dropped.    |
+|    Add sender IDs to channels.telegram.groupAllowFrom or                 |
+|    channels.telegram.allowFrom, or set groupPolicy to "open".            |
+|                                                                          |
++--------------------------------------------------...(truncated)
+[2026-03-25 15:20:57] [INFO] Saved debug copy to: C:\Users\pntha\.openclaw\workspace\data\ttud_2023_group_snapshot_content.txt
+[2026-03-25 15:20:57] [INFO] ========== PHASE 2: Expand visible posts ==========

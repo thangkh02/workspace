@@ -1,7 +1,18 @@
+# Data folder - exclude raw data, cache, generated files
 data/pw-profile/
+data/raw/
+data/processed/
 data/*.png
 data/*.jpg
 data/*.jpeg
 data/*.pdf
-data/candidates.json
-data/drafts.json
+
+# Generated/Raw JSON files
+data/*.json
+!data/groups.json
+!data/ledger.json
+
+# Snapshot and debug files
+data/*.txt
+data/**/*.txt
+data/**/*.json
