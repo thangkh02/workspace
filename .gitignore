@@ -16,3 +16,8 @@ data/*.json
 data/*.txt
 data/**/*.txt
 data/**/*.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
