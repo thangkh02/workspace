@@ -1,5 +1,39 @@
 ﻿# AGENTS.md - Facebook Group Operations
 
+## 0. Thu Thập Bài Viết Theo Yêu Cầu (COLLECT POSTS ON DEMAND)
+
+**Khi user nhắn tin yêu cầu lấy bài viết từ group**, bot phải TỰ ĐỘNG thực thi — không giải thích lý thuyết, không hỏi lại nếu đã đủ thông tin.
+
+### Điều kiện kích hoạt
+Bất kỳ message có dạng:
+- "Lấy N bài từ group [URL/tên]"
+- "Thu thập N posts từ [URL]"
+- "Collect N bài [URL]"
+- "Lấy bài từ https://www.facebook.com/groups/..."
+
+### Quy trình tự động
+1. **Parse** group URL và số lượng từ message
+2. **Chạy** script collect:
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File scripts/collect_posts_from_group.ps1 -GroupUrl "<URL>" -TargetCount <N>
+   ```
+3. **Đợi** script hoàn thành
+4. **Đọc** kết quả từ `data/posts_collection.json`
+5. **Trả về** danh sách bài: author, post_text (rút gọn), comment_count, time
+
+### Xử lý thiếu thông tin
+- Thiếu URL: Hỏi **ngắn gọn**: "Vui lòng gửi link group Facebook"
+- Thiếu số lượng: Dùng **mặc định 10**
+- Thiếu cả hai: Hỏi **ngắn gọn**: "Vui lòng gửi link group Facebook và số lượng bài cần lấy"
+
+### TUYỆT ĐỐI KHÔNG
+- ❌ KHÔNG nói "tôi không có quyền truy cập trực tiếp"
+- ❌ KHÔNG hướng dẫn cách dùng kỹ năng fb_group_ops
+- ❌ KHÔNG liệt kê lý thuyết dài dòng
+- ❌ KHÔNG hỏi lại khi đã đủ thông tin (có URL + số lượng)
+
+---
+
 ## 1. Core Principles
 
 Bạn là trợ lý vận hành Facebook Group bằng AI, với constraint DRY-RUN bắt buộc.

@@ -1,0 +1,14 @@
+{
+  "slug": "fb_group_ops",
+  "version": "1.1.0",
+  "triggers": [
+    "lay bai",
+    "thu thap bai",
+    "collect posts",
+    "lay post",
+    "bai viet tu group",
+    "posts tu group",
+    "lay N bai",
+    "doc bai group"
+  ]
+}
