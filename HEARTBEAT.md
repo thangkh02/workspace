@@ -1,43 +1,48 @@
 # HEARTBEAT.md - Periodic Tasks for OpenClaw
 
-## Enable Periodic Monitoring
+## Active Tasks
 
-Uncomment and configure tasks below to enable automated collection.
-
-## Example: Collect posts every 4 hours
+### Collect TTUD Group Posts (every 4 hours)
 
 ```yaml
 tasks:
   - name: "Collect TTUD Group Posts"
-    enabled: false              # Set to true to activate
-    schedule: "0 */4 * * *"    # Every 4 hours (cron format)
-    command: "python extract_posts.py"
+    enabled: true
+    schedule: "0 */4 * * *"
+    skill: "skills/fb_group_ops.js"
     args:
-      - "https://www.facebook.com/groups/ttud.2023"
-      - "10"                     # Number of posts to collect
+      groupUrl: "https://www.facebook.com/groups/ttud.2023"
+      targetCount: 10
     output: "data/posts_collection.json"
     report_template: "data/processed/dry_run_report.txt"
+    notify: telegram
 ```
 
-## Example: Multiple Groups
+## Add More Groups
+
+Copy the block above and set `enabled: true`:
 
 ```yaml
 tasks:
   - name: "Collect Group 1"
     enabled: false
-    schedule: "0 0 * * *"      # Every day at midnight
-    command: "python extract_posts.py"
-    args: ["https://www.facebook.com/groups/group1", "15"]
+    schedule: "0 0 * * *"
+    skill: "skills/fb_group_ops.js"
+    args:
+      groupUrl: "https://www.facebook.com/groups/GROUP_ID"
+      targetCount: 15
 
   - name: "Collect Group 2"
     enabled: false
-    schedule: "0 6 * * *"      # Every day at 6 AM
-    command: "python extract_posts.py"
-    args: ["https://www.facebook.com/groups/group2", "10"]
+    schedule: "0 6 * * *"
+    skill: "skills/fb_group_ops.js"
+    args:
+      groupUrl: "https://www.facebook.com/groups/GROUP2_ID"
+      targetCount: 10
 
   - name: "Generate Daily Report"
     enabled: false
-    schedule: "0 22 * * *"     # Every day at 10 PM
+    schedule: "0 22 * * *"
     depends_on: ["Collect Group 1", "Collect Group 2"]
     command: "python scripts/render_dry_run_report.py"
 ```
@@ -52,13 +57,12 @@ tasks:
 | `0 6 * * *` | Every day at 6 AM |
 | `0 9-17 * * MON-FRI` | Every hour, 9 AM-5 PM weekdays |
 
-## How to Enable
+## How to Enable / Disable
 
-1. Edit this file
-2. Set `enabled: true` for the task
-3. Save
-4. OpenClaw will activate on next heartbeat check
-5. View logs: `cat logs/heartbeat.log`
+1. Edit this file — set `enabled: true` or `enabled: false`
+2. Save
+3. OpenClaw activates on next heartbeat check
+4. View logs: `cat logs/heartbeat.log`
 
 ## Notes
 
@@ -66,4 +70,5 @@ tasks:
 - ✅ Results saved to `data/` folder (gitignored)
 - ✅ Actions logged to `data/ledger.json`
 - ✅ Reports generated to `data/processed/`
-- ⏱️ Timeouts: Default 5 minutes per task
+- ✅ Telegram notifications sent when `notify: telegram` is set
+- ⏱️ Timeouts: Default 10 minutes per task

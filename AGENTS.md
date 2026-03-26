@@ -190,7 +190,61 @@ python scripts/render_dry_run_report.py
 }
 ```
 
+## 10. Bot Integration (Telegram → Skill → Result)
+
+Khi user nhắn bot **"lấy posts từ group X"**, bot thực hiện theo đúng flow sau:
+
+### Flow
+
+```
+User message → parseGroupUrl() → collectPosts() → formatReport() → Telegram
+```
+
+### Skill: `skills/fb_group_ops.js`
+
+```javascript
+const skill = require('./skills/fb_group_ops');
+
+// 1. Parse group URL từ user message
+const groupUrl = skill.parseGroupUrl(userMessage);
+if (!groupUrl) {
+  return sendTelegram('❌ Không tìm thấy group URL. Hãy gửi link group Facebook.');
+}
+
+// 2. Chạy workflow (PowerShell), đợi ~2-5 phút
+const result = await skill.collectPosts(groupUrl, 10);
+
+// 3. Format & gửi Telegram
+const report = skill.formatReport(result);
+sendTelegram(report);
+```
+
+### Các message mẫu bot có thể nhận
+
+| User message | Kết quả parseGroupUrl() |
+|---|---|
+| `lấy posts từ group ttud.2023` | `https://www.facebook.com/groups/ttud.2023` |
+| `collect posts group https://facebook.com/groups/123456` | `https://www.facebook.com/groups/123456` |
+| `xem bài viết nhóm 987654321` | `https://www.facebook.com/groups/987654321` |
+
+### Thêm group alias
+
+Mở `skills/fb_group_ops.js`, tìm `GROUP_ALIASES` và thêm:
+
+```javascript
+const GROUP_ALIASES = {
+  'ttud.2023': 'https://www.facebook.com/groups/ttud.2023',
+  'my-group':  'https://www.facebook.com/groups/my-group-id',  // ← thêm vào đây
+};
+```
+
+### Lưu ý
+
+- Skill luôn chạy ở **DRY-RUN**: không post/comment/submit
+- Kết quả lưu tại `data/posts_collection.json`
+- Timeout mặc định: 10 phút
+
 ---
 
-**Last Updated**: 2024
+**Last Updated**: 2026-03
 **Mode**: DRY-RUN (safe by default)
