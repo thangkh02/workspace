@@ -153,12 +153,24 @@ Cần duyệt: Y/N (có action cần user approve)
 
 ## 8. Command Reference
 
-**Run full pipeline:**
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts/run_capture_pipeline.ps1
+**Collect posts (primary command — works on any OS):**
+```bash
+node scripts/fb-collect.js "<group_url>" <target_count>
+# Ví dụ:
+node scripts/fb-collect.js "https://www.facebook.com/groups/ttud.2023" 10
 ```
 
-**Generate report:**
+**Collect + chạy full pipeline + tạo report:**
+```bash
+node scripts/fb-collect.js --pipeline "<group_url>" <target_count>
+```
+
+**Headless mode (không hiển thị browser):**
+```bash
+node scripts/fb-collect.js --headless "<group_url>" <target_count>
+```
+
+**Chỉ chạy Python pipeline (sau khi đã collect):**
 ```bash
 python scripts/merge_posts_and_refs.py
 python scripts/build_candidate_posts.py
@@ -166,7 +178,64 @@ python scripts/generate_dry_run_plan.py
 python scripts/render_dry_run_report.py
 ```
 
-## 9. Configuration Format
+**Run full pipeline (PowerShell, nếu có openclaw browser):**
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/run_capture_pipeline.ps1
+```
+
+## 9. Hướng dẫn Bot Xử lý Request từ Telegram
+
+### Khi user gửi: "collect posts từ group XYZ"
+
+**Bước 1 — Parse group URL từ message:**
+- Tìm URL dạng `facebook.com/groups/...` trong message
+- Nếu không có URL đầy đủ, hỏi lại user
+- Tìm target count nếu user đề cập (default: 10)
+
+**Bước 2 — Kiểm tra groups.json:**
+```json
+// Đọc data/groups.json để biết group có được cấu hình không
+// Nếu chưa có, thêm group vào file trước khi chạy
+```
+
+**Bước 3 — Thực thi collect:**
+```bash
+node scripts/fb-collect.js --pipeline "<parsed_group_url>" <target_count>
+```
+
+**Bước 4 — Đọc kết quả:**
+- Script in JSON summary ra stdout → parse để lấy `posts_collected`, `status`
+- Đọc `data/posts_collection.json` để xem posts đã thu thập
+- Đọc `data/processed/dry_run_report.txt` để xem báo cáo đề xuất
+
+**Bước 5 — Trả về cho user:**
+```
+✅ Đã thu thập N bài viết từ group XYZ
+
+📊 Kết quả:
+- Bài viết thu thập: N
+- Đề xuất respond: X
+- Đề xuất like: Y
+
+📋 Báo cáo chi tiết: data/processed/dry_run_report.txt
+⏳ Cần duyệt trước khi thực thi bất kỳ action nào
+```
+
+### Ví dụ xử lý message
+
+| User message | Bot action |
+|---|---|
+| "thu thập bài từ group fb.com/groups/abc" | `node scripts/fb-collect.js --pipeline "https://facebook.com/groups/abc" 10` |
+| "lấy 20 posts từ group ttud.2023" | `node scripts/fb-collect.js --pipeline "https://www.facebook.com/groups/ttud.2023" 20` |
+| "xem báo cáo dry-run" | `cat data/processed/dry_run_report.txt` |
+| "chạy pipeline cho group đã cấu hình" | Đọc `data/groups.json` → lấy URL → chạy fb-collect.js |
+
+### Lưu ý quan trọng
+- **Luôn DRY-RUN**: `fb-collect.js` chỉ thu thập, không gửi gì lên Facebook
+- **Cần duyệt**: Mọi đề xuất action đều cần user approve trong `dry_run_plan.json`
+- **Browser profile**: Script dùng `data/pw-profile/` — lần đầu cần đăng nhập Facebook thủ công
+
+## 10. Configuration Format
 
 **groups.json:**
 ```json

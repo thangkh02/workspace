@@ -1,0 +1,20 @@
+{
+  "name": "facebook_group_dryrun",
+  "version": "1.0.0",
+  "description": "Full dry-run pipeline: collect Facebook group posts, filter, plan, and report — no actions executed without user approval.",
+  "entrypoint": "scripts/fb-collect.js",
+  "commands": {
+    "run": "node scripts/fb-collect.js --pipeline <group_url> [target_count]"
+  },
+  "requires": {
+    "env": [],
+    "files": ["data/groups.json"]
+  },
+  "metadata": {
+    "openclaw": {
+      "emoji": "🔍",
+      "dryRunDefault": true,
+      "approvalRequired": true
+    }
+  }
+}

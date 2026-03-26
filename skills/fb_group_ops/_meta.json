@@ -1,0 +1,21 @@
+{
+  "name": "fb_group_ops",
+  "version": "1.0.0",
+  "description": "Collect posts from Facebook groups, filter candidates, generate dry-run plans, and (with approval) post comments or reactions. DRY-RUN by default.",
+  "entrypoint": "scripts/fb-collect.js",
+  "commands": {
+    "collect": "node scripts/fb-collect.js <group_url> [target_count]",
+    "pipeline": "node scripts/fb-collect.js --pipeline <group_url> [target_count]"
+  },
+  "requires": {
+    "env": [],
+    "files": ["data/groups.json"]
+  },
+  "metadata": {
+    "openclaw": {
+      "emoji": "📋",
+      "dryRunDefault": true,
+      "approvalRequired": true
+    }
+  }
+}
