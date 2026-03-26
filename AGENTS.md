@@ -61,8 +61,11 @@ Bạn là trợ lý vận hành Facebook Group bằng AI, với constraint DRY-R
 ## 4. Pipeline Steps
 
 ```
-Capture (JS):
-  expand_visible_posts.js → extract_visible_posts.js → lookup_post_action_refs.js
+Capture (Browser + JS):
+  openclaw browser navigate <url> --browser-profile openclaw
+  openclaw browser evaluate --fn <expand_visible_posts.js> --browser-profile openclaw
+  openclaw browser evaluate --fn <extract_visible_posts.js> --browser-profile openclaw
+  openclaw browser evaluate --fn <lookup_post_action_refs.js> --browser-profile openclaw
   ↓ dom_posts.json
 
 Parse (Python):
@@ -156,6 +159,30 @@ Cần duyệt: Y/N (có action cần user approve)
 **Run full pipeline:**
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/run_capture_pipeline.ps1
+```
+
+**Collect posts from group (main entry point):**
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/collect_posts_from_group.ps1 `
+    -GroupUrl "https://www.facebook.com/groups/GROUP_ID" `
+    -TargetCount 10
+```
+
+**Browser CLI (OpenClaw API):**
+```powershell
+# Navigate to URL
+openclaw browser navigate <url> --browser-profile openclaw
+
+# Evaluate JS from file
+$js = Get-Content -Path "./scripts/script.js" -Raw
+openclaw browser evaluate --fn $js --browser-profile openclaw
+
+# Evaluate JS inline
+openclaw browser evaluate --fn "document.title" --browser-profile openclaw
+
+# Snapshot / screenshot
+openclaw browser snapshot --browser-profile openclaw
+openclaw browser screenshot --browser-profile openclaw
 ```
 
 **Generate report:**
